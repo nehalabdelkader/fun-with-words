@@ -1,0 +1,1 @@
+export { WORD_CATEGORIES } from './wordCategories';
