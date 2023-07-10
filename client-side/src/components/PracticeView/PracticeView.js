@@ -18,16 +18,20 @@ export const PracticeView = (props) => {
 
   // states
   const [wordsList, setWordsList] = useState();
+  // stores current word, selected category, progress, number of correct answers
   const [currentState, setCurrentState] = useState({});
+  // stores snackbar open state, message, severity [success: correct answer or error: wrong answer]
   const [snackbar, setSnackbar] = useState({
     open: false,
   });
 
   //handlers
 
+  // closes snackbar
   const handleCloseSnackbar = () => {
     setSnackbar({ open: false });
   };
+  // open snack bar with new message
   const handleOpenSnackbar = (data) => {
     setSnackbar({
       open: true,
@@ -35,6 +39,7 @@ export const PracticeView = (props) => {
     });
   };
 
+  // updates selected word category
   const handleSelectingCategory = (event) => {
     setCurrentState((prev) => ({
       ...prev,
@@ -42,26 +47,36 @@ export const PracticeView = (props) => {
     }));
   };
 
+  // handles submit button click
   const handleSubmit = () => {
-    // correct answer
     let correctAnswersCount;
+    // in case of success
     if (currentState.selectedCategory === currentState.word.pos) {
       //show success snackbar
       handleOpenSnackbar({
         severity: "success",
         message: "Correct answer! GOOD JOB",
       });
+      // update score
       handleScoreChange(
         ((currentState.correctAnswersCount + 1) / wordsList.length) * 100
       );
+      // increment correctAnswersCount
       correctAnswersCount = currentState.correctAnswersCount + 1;
     } else {
+      // in case of failure
+      // show failure snackbar
       handleOpenSnackbar({
         severity: "error",
         message: "Ops! Wrong answer try again",
       });
     }
 
+    // in case we haven't reached end of wordsList
+    // update current state
+    // with new word
+    // new progress
+    // reset selected category
     if (currentState.index < wordsList.length - 1) {
       setCurrentState((prev) => {
         const newIndex = prev.index + 1;
@@ -74,11 +89,13 @@ export const PracticeView = (props) => {
         };
       });
     } else {
+      // in case we finished all questions
       handleFinishedPractice();
     }
   };
 
-  useEffect(() => {
+  // words GET request
+  const getWords = () => {
     axios
       .get(API.WORDS)
       .then((res) => {
@@ -94,6 +111,11 @@ export const PracticeView = (props) => {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  useEffect(() => {
+    // get words on component mount
+    getWords();
   }, []);
 
   return (

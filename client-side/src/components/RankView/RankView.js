@@ -8,7 +8,8 @@ export const RankView = (props) => {
 
   const [rank, setRank] = useState();
 
-  useEffect(() => {
+  // rank GET request
+  const getRank = () => {
     axios
       .get(API.RANK, {
         params: {
@@ -19,6 +20,11 @@ export const RankView = (props) => {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  useEffect(() => {
+    // get rank on component mount
+    getRank();
   }, []);
 
   return (
