@@ -41,7 +41,7 @@ const generateRandomWords = (length) => {
     // get a category list to choose from
     const currentCategoryList =
       catgorizedGroups[WORD_CATEGORYIES[currentCategoryIndex]];
-    // generate a random index between [0, category list length[
+    // generate a random index between [0, current category list length[
     const randomIndex = getRandomInt(currentCategoryList.length);
     // insert random word into list
     list.push(currentCategoryList[randomIndex]);
